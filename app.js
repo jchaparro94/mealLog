@@ -23,6 +23,25 @@ function UI() {
   }
 }
 
+// Show Alert 
+UI.prototype.showAlert = function (message, className) {
+  // Create the div 
+  const div = document.createElement('div');
+  // Add class name 
+  div.className = `alert ${className}`;
+  // add text 
+  div.appendChild(document.createTextNode(message));
+  // Get Parent El 
+  const container = document.querySelector('.container');
+  const form = document.querySelector('#meal-form');
+  // Insert alert before the form 
+  container.insertBefore(div, form);
+  // Time out 
+  setTimeout(function () {
+    document.querySelector('.alert').remove();
+  }, 3000);
+}
+
 // Clear Fields 
 UI.prototype.clearFields = function () {
   document.getElementById('name').value = '';
@@ -44,11 +63,17 @@ document.getElementById('meal-form').addEventListener('submit', function (e) {
   // Instantiate UI 
   const ui = new UI();
 
-  // Add book to list 
-  ui.addMealToList(meal);
+  // Validate 
+  if (name === '' || calories === "" || mealNum === "") {
+    // Show Alert 
+    ui.showAlert('Please fill in all fields', 'error');
+  } else {
+    // Add book to list 
+    ui.addMealToList(meal);
 
-  // Clear Fields 
-  ui.clearFields();
+    // Clear Fields 
+    ui.clearFields();
+  }
 
   e.preventDefault();
 })
